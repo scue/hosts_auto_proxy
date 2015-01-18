@@ -128,6 +128,7 @@ Summary
     cd ~
     git clone https://github.com/scue/hosts_auto_proxy.git ~/hosts_auto_proxy
     cp ~/hosts_auto_proxy/hosts ~/hosts_auto_proxy/hosts_new
+    cat ~/hosts_auto_proxy/hosts_new | sudo tee -a /etc/hosts # 你可能需要手工删除重复内容
 
     # 2. 配置VPN
     sudo vi /etc/ppp/ip-up.d/route-traffic # 输入以下内容
@@ -136,6 +137,7 @@ Summary
     sudo vi /etc/ppp/ip-down.d/route-traffic # 输入以下内容
     #!/bin/bash
     (cd /path/to/this_project_src && sudo sudo ./pptp_route.sh off)
+
     sudo chmod +x /etc/ppp/ip-up.d/route-traffic
     sudo chmod +x /etc/ppp/ip-down.d/route-traffic 
 
