@@ -18,7 +18,7 @@
 #===============================================================================
 
 opt=$1                                          # on|off
-host=./hosts_new
+host=./hosts_dns
 dev=$(ifconfig -s | grep -o 'ppp[0-9]\+')
 
 case $opt in
@@ -39,18 +39,16 @@ if [[ "$dev" == "" ]] && [[ "$act" == "on" ]]; then
     echo "未连接VPN，不添加路由规则，退出"
     exit 1
 else
-    sed '/^#/d;/^$/d;/^0.0.0.0/d;/^127.0.0/d;' $host |\
-        awk '{print $1}' | sort | uniq |\
-            while read ip; do
-                case $act in
-                    add )
-                        route add -host $ip dev $dev
-                        ;;
-                    del )
-                        route del -host $ip
-                        ;;
-                esac
-            done
+    while read ip; do
+        case $act in
+            add )
+                route add -host $ip dev $dev
+                ;;
+            del )
+                route del -host $ip
+                ;;
+        esac
+    done < $host
     route -n
 fi
 

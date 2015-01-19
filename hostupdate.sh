@@ -64,9 +64,7 @@ tip(){
 
 # function
 get_addr(){
-    curl -sL http://www.ip138.com/ips1388.asp\?ip\=$1\&action\=1 |\
-        grep -i $1 |grep -o '[0-9.]\+<'|awk -F'<' '{print $1}'
-#   echo $(nslookup "$1" | sed '/^$/d' | sed -n '$p' | sed -n 's/Address: //gp')
+    nslookup $1 | sed '/^$/d' | sed -n 's/Address: //gp'
 }
 
 # get root
@@ -81,21 +79,16 @@ fi
 
 # 2. 更新hosts
 tip "开始更新hosts文件"
-cat $ref_host_file | while read line; do
-    if [[ ${line:0:1} == '#' ]] || [[ ${#line} == 0 ]] \
-        || [[ $(echo $line | grep '0.0.0.0') != "" ]] \
-        || [[ $(echo $line | grep localhost) != "" ]] \
-        || [[ $(echo $line | grep $HOSTNAME) != "" ]]; then
-        echo $line | $rootopt tee -a $new_host_file
-    else
-        addr=$(echo $line|awk '{print $2}')
-        link=""
-        while [[ -z $link ]]; do
-            link=$(get_addr $addr)
-        done
-        printf "%-19s%s\n" $link $addr | $rootopt tee -a $new_host_file
-    fi
+sed '/^#/d;/^$/d;/^0.0.0.0/d;/^127.0.0/d;' $ref_host_file |\
+    awk '{print $2}' | sort | uniq |\
+    while read line; do
+        addr=$line
+        info "updating $addr .."
+        get_addr $addr | $rootopt tee -a $new_host_file
 done
+
+cat $new_host_file | sort | uniq > ${new_host_file}.tmp
+mv ${new_host_file}.tmp $new_host_file
 
 # 3. 追加至 /etc/hosts
 if [[ "$append_to_etc" != "false" ]]; then
