@@ -55,7 +55,7 @@ fi
 # 配置网关，NAT转发pppX
 case $act in
     add )
-        iptables -C -t nat -A POSTROUTING -o $dev -j MASQUERADE || \
+        iptables -t nat -C POSTROUTING -o $dev -j MASQUERADE || \
             iptables -t nat -A POSTROUTING -o $dev -j MASQUERADE
         ;;
     del )
