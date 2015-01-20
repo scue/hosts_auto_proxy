@@ -114,7 +114,7 @@ HowTo
 
     可以这么做，把从ppp0出去的包都做一个nat转发，这里只需要一行命令即可：
 
-        sudo iptables -C -t nat -A POSTROUTING -o ppp0 -j MASQUERADE || \
+        sudo iptables -t nat -C POSTROUTING -o ppp0 -j MASQUERADE || \
             sudo iptables -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
 
     当然，我在脚本pptp_route.sh已经把这件事情帮你给做到了，Enjoy！
@@ -126,7 +126,7 @@ Summary
 ```bash
 # 1. 克隆此项目
 cd ~
-git clone https://github.com/scue/hosts_auto_proxy.git ~/hosts_auto_proxy
+git clone http://200.200.0.36/28120/hosts_autoproxy.git
 cp ~/hosts_auto_proxy/hosts ~/hosts_auto_proxy/hosts_new
 cat ~/hosts_auto_proxy/hosts_new | sudo tee -a /etc/hosts # 你可能需要手工删除重复内容
 
