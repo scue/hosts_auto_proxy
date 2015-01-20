@@ -122,27 +122,27 @@ HowTo
 Summary
 =======
 
-写了那么多，来一个总结吧
 
-    # 1. 克隆此项目
-    cd ~
-    git clone https://github.com/scue/hosts_auto_proxy.git ~/hosts_auto_proxy
-    cp ~/hosts_auto_proxy/hosts ~/hosts_auto_proxy/hosts_new
-    cat ~/hosts_auto_proxy/hosts_new | sudo tee -a /etc/hosts # 你可能需要手工删除重复内容
+```bash
+# 1. 克隆此项目
+cd ~
+git clone https://github.com/scue/hosts_auto_proxy.git ~/hosts_auto_proxy
+cp ~/hosts_auto_proxy/hosts ~/hosts_auto_proxy/hosts_new
+cat ~/hosts_auto_proxy/hosts_new | sudo tee -a /etc/hosts # 你可能需要手工删除重复内容
 
-    # 2. 配置VPN
-    sudo vi /etc/ppp/ip-up.d/route-traffic # 输入以下内容
-    #!/bin/bash
-    (cd /home/YOURNAME/hosts_auto_proxy && sudo ./pptp_route.sh on)
-    sudo vi /etc/ppp/ip-down.d/route-traffic # 输入以下内容
-    #!/bin/bash
-    (cd /path/to/this_project_src && sudo ./pptp_route.sh off)
+# 2. 配置VPN
+sudo vi /etc/ppp/ip-up.d/route-traffic # 输入以下内容
+#!/bin/bash
+(cd /home/YOURNAME/hosts_auto_proxy && sudo ./pptp_route.sh on)
+sudo vi /etc/ppp/ip-down.d/route-traffic # 输入以下内容
+#!/bin/bash
+(cd /path/to/this_project_src && sudo ./pptp_route.sh off)
 
-    sudo chmod +x /etc/ppp/ip-up.d/route-traffic
-    sudo chmod +x /etc/ppp/ip-down.d/route-traffic 
+sudo chmod +x /etc/ppp/ip-up.d/route-traffic
+sudo chmod +x /etc/ppp/ip-down.d/route-traffic 
 
-    # 3. 连接VPN
-    sudo apt-get install pptp-linux pptpd
-    sudo pptpsetup --create proxy_name --server proxy_addr --username your_account --password your_passwd --encrypt --start
+# 3. 连接VPN
+sudo apt-get install pptp-linux pptpd
+sudo pptpsetup --create proxy_name --server proxy_addr --username your_account --password your_passwd --encrypt --start
+```
 
-按步骤执行完这些命令，做你爱做的事情吧，哈哈！
